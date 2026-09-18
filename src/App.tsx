@@ -19,6 +19,7 @@ import { AlejandroPixelCompanion } from './components/AlejandroPixelCompanion';
 import { CursorFollower } from './components/CursorFollower';
 import { InteractiveParticleBackground } from './components/InteractiveParticleBackground';
 import { DefenseQuestionsSection } from './components/DefenseQuestionsSection';
+import { soundManager } from './utils/soundManager';
 
 const LOCAL_STORAGE_KEY = 'espoch_proyecto_vida_data';
 
@@ -116,6 +117,31 @@ export default function App() {
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
+
+  // Global subtle sound effects delegation for buttons and interactive cards
+  useEffect(() => {
+    const handleMouseOver = (e: MouseEvent) => {
+      const target = (e.target as HTMLElement)?.closest('button, a, [role="button"], input[type="button"]');
+      if (target) {
+        soundManager.playHover();
+      }
+    };
+
+    const handleClick = (e: MouseEvent) => {
+      const target = (e.target as HTMLElement)?.closest('button, a, [role="button"], input[type="button"]');
+      if (target) {
+        soundManager.playClick();
+      }
+    };
+
+    document.addEventListener('mouseover', handleMouseOver, { passive: true });
+    document.addEventListener('click', handleClick, { passive: true });
+
+    return () => {
+      document.removeEventListener('mouseover', handleMouseOver);
+      document.removeEventListener('click', handleClick);
+    };
   }, []);
 
   const handleSaveData = (updatedData: ProjectLifeData) => {

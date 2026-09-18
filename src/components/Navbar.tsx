@@ -147,8 +147,24 @@ export const Navbar: React.FC<NavbarProps> = ({
             })}
           </nav>
 
-          {/* Actions: Deliver to Docente & Print / PDF */}
+          {/* Actions: Sound Toggle, Deliver to Docente & Print / PDF */}
           <div className="flex items-center gap-2">
+            {/* Sound Effects Toggle Button */}
+            <button
+              onClick={() => {
+                const newState = soundManager.toggle();
+                // Force re-render state if needed or simple alert/toast
+              }}
+              title="Activar o silenciar efectos de sonido sutiles"
+              className="p-2 rounded-xl text-slate-300 hover:text-white bg-slate-900/80 hover:bg-slate-800 border border-slate-800 transition-all shadow-sm"
+            >
+              {soundManager.isEnabled() ? (
+                <Volume2 className="w-4 h-4 text-cyan-400" />
+              ) : (
+                <VolumeX className="w-4 h-4 text-slate-500" />
+              )}
+            </button>
+
             {/* Print / PDF Button */}
             {onOpenPrintDossier && (
               <button
