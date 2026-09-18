@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500" fill="none" className="w-full h-full">
+  <rect width="500" height="500" rx="36" fill="#CC1820"/>
+  <!-- Outer Shield Outline -->
+  <path d="M125 90 H375 V325 C375 365 315 405 250 425 C185 405 125 365 125 325 Z" 
+        stroke="#FFFFFF" stroke-width="26" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  <!-- Gear Wheel (Sol / Engranaje) -->
+  <path d="M175 220 
+           A 90 90 0 0 1 325 220" 
+        stroke="#FFFFFF" stroke-width="24" stroke-linecap="round" fill="none"/>
+  <!-- Gear Teeth -->
+  <rect x="236" y="115" width="28" height="34" rx="4" fill="#FFFFFF"/>
+  <rect x="178" y="132" width="28" height="34" rx="4" transform="rotate(-35 192 149)" fill="#FFFFFF"/>
+  <rect x="294" y="132" width="28" height="34" rx="4" transform="rotate(35 308 149)" fill="#FFFFFF"/>
+  <rect x="142" y="185" width="28" height="34" rx="4" transform="rotate(-70 156 202)" fill="#FFFFFF"/>
+  <rect x="330" y="185" width="28" height="34" rx="4" transform="rotate(70 344 202)" fill="#FFFFFF"/>
+  
+  <!-- Chimborazo Mountain Silhouette -->
+  <path d="M142 300 C 185 245, 235 240, 275 275 C 310 295, 340 280, 358 305" 
+        stroke="#FFFFFF" stroke-width="26" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  
+  <!-- Open Book Base -->
+  <path d="M150 445 C 200 440, 240 455, 250 460 C 260 455, 300 440, 350 445" 
+        stroke="#FFFFFF" stroke-width="24" stroke-linecap="round" fill="none"/>
+</svg>

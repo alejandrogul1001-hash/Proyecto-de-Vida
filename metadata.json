@@ -1,0 +1,8 @@
+{
+  "name": "Remix Proyecto de Vida - ESPOCH",
+  "description": "Landing page y presentación de proyecto de vida: ¿Quién soy y hacia dónde voy? - Escuela Superior Politécnica de Chimborazo",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

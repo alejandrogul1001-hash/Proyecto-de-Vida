@@ -1,0 +1,47 @@
+@import "tailwindcss";
+
+@media print {
+  /* Hide interactive, floating and UI chrome */
+  nav, 
+  footer, 
+  #floating-settings-wheel,
+  #particle-bg,
+  canvas,
+  .no-print, 
+  [role="dialog"], 
+  button {
+    display: none !important;
+  }
+
+  /* Force clean white background and sharp black text for academic print */
+  body, html {
+    background-color: #ffffff !important;
+    color: #0f172a !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  @page {
+    size: A4 portrait;
+    margin: 14mm 12mm 14mm 12mm;
+  }
+
+  /* Show and format the official printable dossier */
+  #printable-academic-dossier {
+    display: block !important;
+    visibility: visible !important;
+    position: static !important;
+    width: 100% !important;
+    margin: 0 auto !important;
+    padding: 0 !important;
+  }
+
+  /* Prevent awkward page cutoffs */
+  .break-inside-avoid, 
+  section, 
+  article {
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+  }
+}
+
