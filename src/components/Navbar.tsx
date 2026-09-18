@@ -1,33 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import { 
-  Compass, 
-  Download, 
-  Sparkles,
-  ChevronRight,
-  GraduationCap,
-  Share2,
-  Printer,
-  Volume2,
-  VolumeX
-} from 'lucide-react';
+import { GraduationCap } from 'lucide-react';
 import { EspochLogo, FadeContabilidadLogo } from './Logos';
-import { soundManager } from '../utils/soundManager';
 
 interface NavbarProps {
   onOpenPresentation?: () => void;
   onOpenEditor?: () => void;
-  onOpenExport: () => void;
+  onOpenExport?: () => void;
   onOpenShareDocente?: () => void;
   onOpenPrintDossier?: () => void;
   activeSection: string;
 }
 
-export const Navbar: React.FC<NavbarProps> = ({
-  onOpenExport,
-  onOpenShareDocente,
-  onOpenPrintDossier,
-  activeSection,
-}) => {
+export const Navbar: React.FC<NavbarProps> = () => {
   const [scrollProgress, setScrollProgress] = useState(0);
   const [scrolled, setScrolled] = useState(false);
 
@@ -41,25 +25,12 @@ export const Navbar: React.FC<NavbarProps> = ({
       setScrolled(window.scrollY > 20);
     };
 
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const navLinks = [
-    { id: 'inicio', label: 'Inicio' },
-    { id: 'identidad', label: 'Identidad' },
-    { id: 'dimensiones', label: 'Metas 3D' },
-    { id: 'vision5', label: 'Plan 5 Años' },
-    { id: 'decision', label: 'Decisión' },
-    { id: 'defensa-preguntas', label: 'Defensa Cátedra' },
-    { id: 'compromiso', label: 'Compromiso' },
-  ];
-
-  const scrollTo = (id: string) => {
-    const el = document.getElementById(id);
-    if (el) {
-      el.scrollIntoView({ behavior: 'smooth' });
-    }
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   return (
@@ -73,135 +44,67 @@ export const Navbar: React.FC<NavbarProps> = ({
 
       <header 
         id="main-navigation-bar"
-        className={`fixed top-3 left-0 right-0 z-40 px-4 md:px-8 transition-all duration-300 ${
-          scrolled ? 'py-1' : 'py-3'
+        className={`fixed top-2.5 sm:top-3 left-0 right-0 z-40 px-3 sm:px-6 md:px-8 transition-all duration-300 ${
+          scrolled ? 'py-1' : 'py-2 sm:py-3'
         }`}
       >
-        <div className="max-w-7xl mx-auto flex items-center justify-between gap-3 px-4 py-2.5 rounded-2xl bg-[#0f172a]/80 backdrop-blur-xl border border-slate-800/80 shadow-2xl shadow-cyan-950/20">
-          {/* Brand / ESPOCH & FADE Logos (Separados e Institucionales) */}
-          <div 
-            onClick={() => scrollTo('inicio')}
-            className="flex items-center gap-3 cursor-pointer group"
-          >
-            {/* Logo ESPOCH */}
-            <div className="flex items-center gap-2 group-hover:opacity-95 transition-opacity">
+        <div className="max-w-7xl mx-auto flex items-center justify-center px-3 sm:px-6 py-2 rounded-2xl bg-[#0f172a]/92 backdrop-blur-2xl border border-slate-800/90 shadow-2xl shadow-cyan-950/50">
+          
+          {/* Centered Group: ESPOCH Brand + José Alejandro + Docente Hitalo Veloz (Adaptive Mobile & Desktop) */}
+          <div className="w-full flex items-center justify-center flex-wrap sm:flex-nowrap gap-2.5 sm:gap-6 text-center">
+            
+            {/* 1. ESPOCH Logo & Brand */}
+            <div 
+              onClick={scrollToTop}
+              className="flex items-center gap-2 cursor-pointer group shrink-0"
+              title="Ir al inicio"
+            >
               <EspochLogo size="sm" className="rounded-lg shadow-sm" />
-              <div className="hidden sm:flex flex-col">
-                <span className="text-[11px] font-extrabold tracking-wider uppercase text-red-400">ESPOCH</span>
-                <span className="text-[9px] text-slate-400">Riobamba</span>
+              <div className="hidden xs:flex flex-col text-left">
+                <span className="text-[10px] sm:text-[11px] font-extrabold tracking-wider uppercase text-red-400 leading-tight">ESPOCH</span>
+                <span className="text-[8px] sm:text-[9px] text-slate-400 leading-tight">Riobamba</span>
               </div>
             </div>
 
-            <div className="h-5 w-px bg-slate-800 hidden sm:block" />
+            <div className="h-4 sm:h-5 w-px bg-slate-800 hidden xs:block shrink-0" />
 
-            {/* Logo Carrera FADE */}
-            <div className="flex items-center gap-2">
+            {/* 2. José Alejandro Gullqui */}
+            <div 
+              onClick={scrollToTop}
+              className="flex items-center gap-2 cursor-pointer group shrink-0"
+            >
               <FadeContabilidadLogo size="sm" className="rounded-full shadow-sm" />
-              <div className="flex flex-col">
-                <span className="text-xs font-semibold text-white group-hover:text-cyan-300 transition-colors">
+              <div className="flex flex-col text-left">
+                <span className="text-xs font-semibold text-white group-hover:text-cyan-300 transition-colors leading-tight">
                   José Alejandro Gullqui
                 </span>
-                <span className="text-[10px] text-slate-400">
+                <span className="text-[9px] sm:text-[10px] text-slate-400 leading-tight">
                   Contabilidad y Auditoría · 6to Semestre
                 </span>
               </div>
             </div>
-          </div>
 
-          {/* Academic Cátedra Capsule (Docente: Ingeniero Hitalo Veloz | Formulación y Evaluación de Proyectos) */}
-          <div className="hidden md:flex items-center gap-2.5 px-3.5 py-1.5 rounded-xl bg-slate-900/95 border border-cyan-500/25 shadow-md shadow-cyan-950/30">
-            <div className="flex items-center justify-center w-6 h-6 rounded-lg bg-cyan-950/80 border border-cyan-700/50 text-cyan-300 shrink-0">
-              <GraduationCap className="w-3.5 h-3.5" />
-            </div>
-            <div className="flex flex-col text-left">
-              <div className="flex items-center gap-1.5 text-xs leading-tight">
-                <span className="text-slate-400 font-normal">Docente:</span>
-                <strong className="text-slate-100 font-semibold tracking-wide">
-                  Ingeniero Hitalo Veloz
-                </strong>
+            <div className="h-4 sm:h-5 w-px bg-slate-800 hidden md:block shrink-0" />
+
+            {/* 3. Docente Hitalo Veloz Capsule */}
+            <div className="hidden sm:flex items-center gap-2 px-2.5 sm:px-3 py-1 rounded-xl bg-slate-900/95 border border-cyan-500/25 shadow-sm shrink-0">
+              <div className="flex items-center justify-center w-5 h-5 rounded-lg bg-cyan-950/80 border border-cyan-700/50 text-cyan-300 shrink-0">
+                <GraduationCap className="w-3 h-3" />
               </div>
-              <span className="text-[10px] text-cyan-300 font-medium leading-tight tracking-tight">
-                Formulación y Evaluación de Proyectos
-              </span>
+              <div className="flex flex-col text-left">
+                <div className="flex items-center gap-1 text-[10px] sm:text-[11px] leading-tight">
+                  <span className="text-slate-400">Docente:</span>
+                  <strong className="text-slate-100 font-semibold">
+                    Ing. Hitalo Veloz
+                  </strong>
+                </div>
+                <span className="text-[8px] sm:text-[9px] text-cyan-300 font-medium leading-tight">
+                  Formulación y Evaluación de Proyectos
+                </span>
+              </div>
             </div>
+
           </div>
-
-          {/* Center Links (Desktop) */}
-          <nav className="hidden xl:flex items-center gap-1">
-            {navLinks.map((link) => {
-              const isActive = activeSection === link.id;
-              return (
-                <button
-                  key={link.id}
-                  id={`nav-link-${link.id}`}
-                  onClick={() => scrollTo(link.id)}
-                  className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
-                    isActive 
-                      ? 'text-cyan-400 bg-cyan-950/50 border border-cyan-800/40 shadow-sm'
-                      : 'text-slate-300 hover:text-white hover:bg-slate-800/50'
-                  }`}
-                >
-                  {link.label}
-                </button>
-              );
-            })}
-          </nav>
-
-          {/* Actions: Sound Toggle, Deliver to Docente & Print / PDF */}
-          <div className="flex items-center gap-2">
-            {/* Sound Effects Toggle Button */}
-            <button
-              onClick={() => {
-                const newState = soundManager.toggle();
-                // Force re-render state if needed or simple alert/toast
-              }}
-              title="Activar o silenciar efectos de sonido sutiles"
-              className="p-2 rounded-xl text-slate-300 hover:text-white bg-slate-900/80 hover:bg-slate-800 border border-slate-800 transition-all shadow-sm"
-            >
-              {soundManager.isEnabled() ? (
-                <Volume2 className="w-4 h-4 text-cyan-400" />
-              ) : (
-                <VolumeX className="w-4 h-4 text-slate-500" />
-              )}
-            </button>
-
-            {/* Print / PDF Button */}
-            {onOpenPrintDossier && (
-              <button
-                id="navbar-print-btn"
-                onClick={onOpenPrintDossier}
-                title="Imprimir o guardar en PDF el Dossier Académico Formal (A4)"
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold text-cyan-300 hover:text-cyan-200 bg-cyan-950/60 hover:bg-cyan-900/60 border border-cyan-800/60 transition-all shadow-sm shrink-0"
-              >
-                <Printer className="w-3.5 h-3.5" />
-                <span className="hidden lg:inline">Imprimir / PDF</span>
-              </button>
-            )}
-
-            {/* Share / Deliver to Docente Button */}
-            {onOpenShareDocente && (
-              <button
-                id="share-docente-btn"
-                onClick={onOpenShareDocente}
-                title="Opciones de entrega y compartir con el Ingeniero Veloz (Link, PPTX, PDF)"
-                className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-semibold text-emerald-300 hover:text-emerald-200 bg-emerald-950/60 hover:bg-emerald-900/60 border border-emerald-700/60 transition-all shadow-sm shrink-0"
-              >
-                <Share2 className="w-3.5 h-3.5" />
-                <span className="hidden sm:inline">Entregar al Docente</span>
-              </button>
-            )}
-          </div>
-        </div>
-
-        {/* Mobile Academic Banner for Ingeniero Hitalo Veloz & Subject */}
-        <div className="max-w-7xl mx-auto mt-1 md:hidden flex items-center justify-between px-3.5 py-1 rounded-xl bg-slate-950/90 backdrop-blur-md border border-cyan-800/30 text-[10px] text-slate-300 shadow-md">
-          <div className="flex items-center gap-1.5 truncate">
-            <span className="text-slate-400">Docente:</span>
-            <span className="font-semibold text-slate-100">Ing. Hitalo Veloz</span>
-          </div>
-          <span className="text-cyan-300 font-medium truncate ml-2">
-            Formulación y Evaluación de Proyectos
-          </span>
         </div>
       </header>
     </>

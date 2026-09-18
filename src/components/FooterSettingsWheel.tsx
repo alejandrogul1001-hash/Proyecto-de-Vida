@@ -1,18 +1,16 @@
 import React, { useState } from 'react';
 import { 
   Settings, 
-  Share2, 
   Download, 
   Presentation, 
   Printer, 
   Edit3, 
   X, 
-  ExternalLink, 
-  Sparkles,
-  CheckCircle2,
-  FileText
+  Volume2,
+  VolumeX
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
+import { soundManager } from '../utils/soundManager';
 
 interface FooterSettingsWheelProps {
   onOpenShareDocente: () => void;
@@ -23,13 +21,13 @@ interface FooterSettingsWheelProps {
 }
 
 export const FooterSettingsWheel: React.FC<FooterSettingsWheelProps> = ({
-  onOpenShareDocente,
   onOpenExport,
   onOpenPresentation,
   onOpenEditor,
   onOpenPrintDossier,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [soundOn, setSoundOn] = useState(soundManager.isEnabled());
 
   const handlePrintPdf = () => {
     setIsOpen(false);
@@ -40,18 +38,26 @@ export const FooterSettingsWheel: React.FC<FooterSettingsWheelProps> = ({
     }
   };
 
+  const toggleSound = () => {
+    const newState = soundManager.toggle();
+    setSoundOn(newState);
+  };
+
   return (
     <div className="relative inline-block">
       {/* Configuration Gear Wheel Button */}
       <button
         id="footer-settings-wheel-btn"
-        onClick={() => setIsOpen(!isOpen)}
+        onClick={() => {
+          soundManager.playClick();
+          setIsOpen(!isOpen);
+        }}
         className={`group relative p-3 sm:px-4 sm:py-2.5 rounded-2xl border transition-all duration-300 flex items-center gap-2.5 shadow-xl ${
           isOpen
             ? 'bg-cyan-500 text-slate-950 border-cyan-400 shadow-cyan-500/30'
             : 'bg-slate-900/90 hover:bg-slate-800 border-slate-700/80 text-slate-200 hover:text-white hover:border-cyan-500/50 shadow-slate-950/50'
         }`}
-        title="Rueda de configuración: Entregables, Diapositivas y Herramientas"
+        title="Herramientas de Cátedra, Audio y Entregables"
       >
         <Settings 
           className={`w-5 h-5 transition-transform duration-500 ${
@@ -79,7 +85,7 @@ export const FooterSettingsWheel: React.FC<FooterSettingsWheelProps> = ({
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.9, y: 15 }}
               transition={{ type: 'spring', damping: 25, stiffness: 350 }}
-              className="fixed sm:absolute bottom-6 sm:bottom-14 right-4 sm:right-0 z-50 w-[calc(100vw-32px)] sm:w-84 max-w-sm rounded-3xl bg-slate-900/98 backdrop-blur-2xl border border-cyan-500/40 shadow-2xl shadow-cyan-950/50 overflow-hidden text-left"
+              className="fixed sm:absolute bottom-6 sm:bottom-14 right-4 sm:right-0 z-50 w-[calc(100vw-32px)] sm:w-88 max-w-sm rounded-3xl bg-slate-900/98 backdrop-blur-2xl border border-cyan-500/40 shadow-2xl shadow-cyan-950/50 overflow-hidden text-left"
             >
               {/* Header */}
               <div className="p-4 bg-gradient-to-r from-slate-900 via-indigo-950/40 to-slate-900 border-b border-slate-800 flex items-center justify-between">
@@ -92,7 +98,7 @@ export const FooterSettingsWheel: React.FC<FooterSettingsWheelProps> = ({
                       Panel de Herramientas
                     </h4>
                     <p className="text-[10px] text-slate-400">
-                      Entregables para Cátedra y Exportación
+                      Entregables para Cátedra y Audio
                     </p>
                   </div>
                 </div>
@@ -105,25 +111,49 @@ export const FooterSettingsWheel: React.FC<FooterSettingsWheelProps> = ({
               </div>
 
               {/* Options list */}
-              <div className="p-3 space-y-1.5 max-h-[75vh] overflow-y-auto">
-                {/* 1. Entregar al Ingeniero (Link / PPTX / PDF) */}
+              <div className="p-3 space-y-2.5 max-h-[75vh] overflow-y-auto">
+                
+                {/* Audio Effects Toggle */}
+                <div className="p-3 rounded-2xl bg-slate-950/60 border border-slate-800 flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <div className="p-1.5 rounded-lg bg-cyan-500/10 text-cyan-400">
+                      {soundOn ? <Volume2 className="w-4 h-4" /> : <VolumeX className="w-4 h-4 text-slate-500" />}
+                    </div>
+                    <div>
+                      <span className="text-xs font-bold text-white block">Efectos de Sonido Sutiles</span>
+                      <span className="text-[10px] text-slate-400">Hover y clics inmersivos</span>
+                    </div>
+                  </div>
+                  <button
+                    onClick={toggleSound}
+                    className={`px-3 py-1 rounded-xl text-xs font-bold transition-all ${
+                      soundOn 
+                        ? 'bg-cyan-500 text-slate-950 shadow-sm' 
+                        : 'bg-slate-800 text-slate-400 border border-slate-700'
+                    }`}
+                  >
+                    {soundOn ? 'Activado' : 'Silenciado'}
+                  </button>
+                </div>
+
+                {/* 1. Imprimir / Guardar en PDF (A4 Formal) */}
                 <button
-                  id="wheel-share-docente-btn"
+                  id="wheel-print-pdf-btn"
                   onClick={() => {
-                    setIsOpen(false);
-                    onOpenShareDocente();
+                    soundManager.playClick();
+                    handlePrintPdf();
                   }}
-                  className="w-full p-3 rounded-2xl bg-emerald-950/50 hover:bg-emerald-900/60 border border-emerald-700/50 hover:border-emerald-500/80 transition-all flex items-start gap-3 group text-left"
+                  className="w-full p-3 rounded-2xl bg-slate-800/60 hover:bg-slate-800 border border-slate-700/60 hover:border-blue-500/50 transition-all flex items-start gap-3 group text-left"
                 >
-                  <div className="p-2 rounded-xl bg-emerald-500/20 text-emerald-300 group-hover:scale-110 transition-transform">
-                    <Share2 className="w-4 h-4" />
+                  <div className="p-2 rounded-xl bg-blue-500/10 text-blue-400 group-hover:scale-110 transition-transform">
+                    <Printer className="w-4 h-4" />
                   </div>
                   <div>
-                    <span className="text-xs font-bold text-emerald-200 block group-hover:text-white transition-colors">
-                      Entregar al Ingeniero Veloz
+                    <span className="text-xs font-bold text-slate-200 block group-hover:text-blue-300 transition-colors">
+                      Imprimir o Guardar Dossier (PDF A4)
                     </span>
                     <p className="text-[10px] text-slate-400 mt-0.5 leading-tight">
-                      Generar enlace interactivo, código QR y credencial de cátedra.
+                      Dossier académico formal con membrete, 13 preguntas y firma.
                     </p>
                   </div>
                 </button>
@@ -133,6 +163,7 @@ export const FooterSettingsWheel: React.FC<FooterSettingsWheelProps> = ({
                   id="wheel-export-slides-btn"
                   onClick={() => {
                     setIsOpen(false);
+                    soundManager.playClick();
                     onOpenExport();
                   }}
                   className="w-full p-3 rounded-2xl bg-slate-800/60 hover:bg-slate-800 border border-slate-700/60 hover:border-cyan-500/50 transition-all flex items-start gap-3 group text-left"
@@ -150,52 +181,12 @@ export const FooterSettingsWheel: React.FC<FooterSettingsWheelProps> = ({
                   </div>
                 </button>
 
-                {/* 3. Google Slides */}
-                <button
-                  id="wheel-google-slides-btn"
-                  onClick={() => {
-                    setIsOpen(false);
-                    onOpenExport();
-                  }}
-                  className="w-full p-3 rounded-2xl bg-slate-800/60 hover:bg-slate-800 border border-slate-700/60 hover:border-indigo-500/50 transition-all flex items-start gap-3 group text-left"
-                >
-                  <div className="p-2 rounded-xl bg-indigo-500/10 text-indigo-400 group-hover:scale-110 transition-transform">
-                    <ExternalLink className="w-4 h-4" />
-                  </div>
-                  <div>
-                    <span className="text-xs font-bold text-slate-200 block group-hover:text-indigo-300 transition-colors">
-                      Compatibilidad con Google Slides
-                    </span>
-                    <p className="text-[10px] text-slate-400 mt-0.5 leading-tight">
-                      Subir y abrir directamente el archivo en Google Drive / Slides.
-                    </p>
-                  </div>
-                </button>
-
-                {/* 4. Imprimir / Guardar en PDF */}
-                <button
-                  id="wheel-print-pdf-btn"
-                  onClick={handlePrintPdf}
-                  className="w-full p-3 rounded-2xl bg-slate-800/60 hover:bg-slate-800 border border-slate-700/60 hover:border-blue-500/50 transition-all flex items-start gap-3 group text-left"
-                >
-                  <div className="p-2 rounded-xl bg-blue-500/10 text-blue-400 group-hover:scale-110 transition-transform">
-                    <Printer className="w-4 h-4" />
-                  </div>
-                  <div>
-                    <span className="text-xs font-bold text-slate-200 block group-hover:text-blue-300 transition-colors">
-                      Imprimir o Guardar Dossier (PDF)
-                    </span>
-                    <p className="text-[10px] text-slate-400 mt-0.5 leading-tight">
-                      Dossier académico formal con sello politécnico y firma.
-                    </p>
-                  </div>
-                </button>
-
-                {/* 5. Modo Presentación Clave */}
+                {/* 3. Modo Presentación Clave */}
                 <button
                   id="wheel-presentation-btn"
                   onClick={() => {
                     setIsOpen(false);
+                    soundManager.playClick();
                     onOpenPresentation();
                   }}
                   className="w-full p-3 rounded-2xl bg-slate-800/60 hover:bg-slate-800 border border-slate-700/60 hover:border-purple-500/50 transition-all flex items-start gap-3 group text-left"
@@ -213,11 +204,12 @@ export const FooterSettingsWheel: React.FC<FooterSettingsWheelProps> = ({
                   </div>
                 </button>
 
-                {/* 6. Editar Respuestas del Proyecto */}
+                {/* 4. Editar Respuestas del Proyecto */}
                 <button
                   id="wheel-edit-data-btn"
                   onClick={() => {
                     setIsOpen(false);
+                    soundManager.playClick();
                     onOpenEditor();
                   }}
                   className="w-full p-3 rounded-2xl bg-amber-950/30 hover:bg-amber-950/50 border border-amber-800/40 hover:border-amber-500/60 transition-all flex items-start gap-3 group text-left"
